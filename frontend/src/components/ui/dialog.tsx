@@ -55,23 +55,24 @@ export function DialogContent({
   if (!context || !context.open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      {/* High z-index Backdrop */}
       <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity animate-in fade-in"
+        className="fixed inset-0 z-[9998] bg-black/85 backdrop-blur-md transition-opacity animate-in fade-in duration-150"
         onClick={() => context.setOpen(false)}
       />
-      {/* Modal Dialog */}
+      {/* Modal Dialog Card (Guaranteed above all Leaflet maps & panes) */}
       <div
         className={cn(
-          "relative z-50 w-full max-w-2xl rounded-2xl border border-white/10 bg-spotter-space p-6 shadow-2xl animate-in zoom-in-95 duration-200 text-foreground max-h-[90vh] overflow-y-auto",
+          "relative z-[10000] w-full max-w-2xl rounded-3xl border border-white/15 bg-[#080D0A] p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 text-foreground max-h-[90vh] overflow-y-auto custom-scrollbar my-auto",
           className
         )}
         {...props}
       >
         <button
+          type="button"
           onClick={() => context.setOpen(false)}
-          className="absolute right-4 top-4 rounded-md p-1 text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute right-4 top-4 rounded-xl p-1.5 text-slate-400 hover:text-white hover:bg-white/10 transition-colors z-10"
         >
           <X className="h-5 w-5" />
           <span className="sr-only">Close</span>

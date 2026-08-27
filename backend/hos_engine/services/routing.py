@@ -1,7 +1,7 @@
 """
 Routing and Geocoding Service for Spotter.
 Provides open-source geocoding (Photon / OpenStreetMap) and routing (OSRM)
-with resilient offline logistics fallback.
+with resilient offline logistics fallback and turn-by-turn directions.
 """
 
 import math
@@ -14,8 +14,10 @@ logger = logging.getLogger(__name__)
 # Curated US Major Logistics Hubs & Metropolitan Centers
 US_LOGISTICS_HUBS: List[Dict[str, Any]] = [
     {"name": "Chicago, IL", "city": "Chicago", "state": "IL", "country": "United States", "lat": 41.8781, "lng": -87.6298, "display_name": "Chicago, Cook County, Illinois, United States"},
+    {"name": "Gary, IN", "city": "Gary", "state": "IN", "country": "United States", "lat": 41.5934, "lng": -87.3464, "display_name": "Gary, Lake County, Indiana, United States"},
     {"name": "Indianapolis, IN", "city": "Indianapolis", "state": "IN", "country": "United States", "lat": 39.7684, "lng": -86.1581, "display_name": "Indianapolis, Marion County, Indiana, United States"},
     {"name": "Atlanta, GA", "city": "Atlanta", "state": "GA", "country": "United States", "lat": 33.7490, "lng": -84.3880, "display_name": "Atlanta, Fulton County, Georgia, United States"},
+    {"name": "Birmingham, AL", "city": "Birmingham", "state": "AL", "country": "United States", "lat": 33.5186, "lng": -86.8104, "display_name": "Birmingham, Jefferson County, Alabama, United States"},
     {"name": "Dallas, TX", "city": "Dallas", "state": "TX", "country": "United States", "lat": 32.7767, "lng": -96.7970, "display_name": "Dallas, Dallas County, Texas, United States"},
     {"name": "Fort Worth, TX", "city": "Fort Worth", "state": "TX", "country": "United States", "lat": 32.7555, "lng": -97.3308, "display_name": "Fort Worth, Tarrant County, Texas, United States"},
     {"name": "Houston, TX", "city": "Houston", "state": "TX", "country": "United States", "lat": 29.7604, "lng": -95.3698, "display_name": "Houston, Harris County, Texas, United States"},
@@ -23,6 +25,7 @@ US_LOGISTICS_HUBS: List[Dict[str, Any]] = [
     {"name": "Ontario, CA", "city": "Ontario", "state": "CA", "country": "United States", "lat": 34.0633, "lng": -117.6509, "display_name": "Ontario, San Bernardino County, California, United States"},
     {"name": "New York, NY", "city": "New York", "state": "NY", "country": "United States", "lat": 40.7128, "lng": -74.0060, "display_name": "New York, New York, United States"},
     {"name": "Newark, NJ", "city": "Newark", "state": "NJ", "country": "United States", "lat": 40.7357, "lng": -74.1724, "display_name": "Newark, Essex County, New Jersey, United States"},
+    {"name": "Boston, MA", "city": "Boston", "state": "MA", "country": "United States", "lat": 42.3601, "lng": -71.0589, "display_name": "Boston, Suffolk County, Massachusetts, United States"},
     {"name": "Philadelphia, PA", "city": "Philadelphia", "state": "PA", "country": "United States", "lat": 39.9526, "lng": -75.1652, "display_name": "Philadelphia, Philadelphia County, Pennsylvania, United States"},
     {"name": "Harrisburg, PA", "city": "Harrisburg", "state": "PA", "country": "United States", "lat": 40.2732, "lng": -76.8867, "display_name": "Harrisburg, Dauphin County, Pennsylvania, United States"},
     {"name": "Allentown, PA", "city": "Allentown", "state": "PA", "country": "United States", "lat": 40.6084, "lng": -75.4902, "display_name": "Allentown, Lehigh County, Pennsylvania, United States"},
@@ -51,7 +54,6 @@ US_LOGISTICS_HUBS: List[Dict[str, Any]] = [
     {"name": "Detroit, MI", "city": "Detroit", "state": "MI", "country": "United States", "lat": 42.3314, "lng": -83.0458, "display_name": "Detroit, Wayne County, Michigan, United States"},
     {"name": "Minneapolis, MN", "city": "Minneapolis", "state": "MN", "country": "United States", "lat": 44.9778, "lng": -93.2650, "display_name": "Minneapolis, Hennepin County, Minnesota, United States"},
     {"name": "Louisville, KY", "city": "Louisville", "state": "KY", "country": "United States", "lat": 38.2527, "lng": -85.7585, "display_name": "Louisville, Jefferson County, Kentucky, United States"},
-    {"name": "Birmingham, AL", "city": "Birmingham", "state": "AL", "country": "United States", "lat": 33.5186, "lng": -86.8104, "display_name": "Birmingham, Jefferson County, Alabama, United States"},
     {"name": "Savannah, GA", "city": "Savannah", "state": "GA", "country": "United States", "lat": 32.0809, "lng": -81.0912, "display_name": "Savannah, Chatham County, Georgia, United States"},
     {"name": "Laredo, TX", "city": "Laredo", "state": "TX", "country": "United States", "lat": 27.5306, "lng": -99.4803, "display_name": "Laredo, Webb County, Texas, United States"},
     {"name": "El Paso, TX", "city": "El Paso", "state": "TX", "country": "United States", "lat": 31.7619, "lng": -106.4850, "display_name": "El Paso, El Paso County, Texas, United States"},
@@ -95,7 +97,7 @@ def geocode_location(query: str) -> Optional[Dict[str, Any]]:
 
     # Check local curated hubs for exact or partial match first
     for hub in US_LOGISTICS_HUBS:
-        if q_clean in hub["name"].lower() or q_clean == hub["city"].lower() or hub["name"].lower() in q_clean:
+        if q_clean == hub["name"].lower() or q_clean == hub["city"].lower() or hub["name"].lower() in q_clean:
             return hub
 
     # Query Photon geocoding service
@@ -208,13 +210,13 @@ def autocomplete_locations(query: str, limit: int = 6) -> List[Dict[str, Any]]:
 
 def calculate_osrm_route(waypoints: List[Tuple[float, float]]) -> Dict[str, Any]:
     """
-    Calculates driving route through a list of (lat, lng) tuples using OSRM.
+    Calculates driving route through a list of (lat, lng) tuples using OSRM with step directions.
     Returns:
     {
         "distance_miles": float,
         "duration_hours": float,
         "coordinates": List[[lat, lng]], # polyline points
-        "steps": List[Dict]
+        "directions": List[Dict] # turn-by-turn steps
     }
     """
     if len(waypoints) < 2:
@@ -222,37 +224,64 @@ def calculate_osrm_route(waypoints: List[Tuple[float, float]]) -> Dict[str, Any]
             "distance_miles": 0.0,
             "duration_hours": 0.0,
             "coordinates": [[lat, lng] for lat, lng in waypoints],
-            "steps": []
+            "directions": []
         }
 
     # Format OSRM coordinates: lng,lat;lng,lat;...
     coords_str = ";".join([f"{lng:.6f},{lat:.6f}" for lat, lng in waypoints])
-    osrm_url = f"https://router.project-osrm.org/route/v1/driving/{coords_str}?overview=full&geometries=geojson&steps=false"
+    osrm_url = f"https://router.project-osrm.org/route/v1/driving/{coords_str}?overview=full&geometries=geojson&steps=true"
 
     try:
         headers = {"User-Agent": "SpotterLogisticsHOS/1.0"}
-        resp = requests.get(osrm_url, headers=headers, timeout=6.0)
+        resp = requests.get(osrm_url, headers=headers, timeout=6.5)
         if resp.status_code == 200:
             data = resp.json()
             if data.get("code") == "Ok" and data.get("routes"):
                 route = data["routes"][0]
-                # OSRM distance is in meters -> convert to statute miles
                 distance_meters = route.get("distance", 0.0)
                 distance_miles = distance_meters * 0.000621371
-                
-                # Duration in seconds -> convert to hours (calibrated for commercial freight truck speeds)
                 duration_seconds = route.get("duration", 0.0)
-                # CMV truck speed calibration: 18-wheelers travel average ~55-60 mph with weigh stations & grades
                 truck_calibrated_hours = max(distance_miles / 55.0, duration_seconds / 3600.0)
 
-                # Geometry is GeoJSON LineString [lng, lat] -> convert to Leaflet format [lat, lng]
                 geojson_coords = route.get("geometry", {}).get("coordinates", [])
                 leaflet_coords = [[float(c[1]), float(c[0])] for c in geojson_coords]
+
+                # Parse turn-by-turn direction steps
+                directions: List[Dict[str, Any]] = []
+                for leg_idx, leg in enumerate(route.get("legs", [])):
+                    for step in leg.get("steps", []):
+                        step_dist_mi = round(step.get("distance", 0) * 0.000621371, 1)
+                        if step_dist_mi < 0.1 and step.get("maneuver", {}).get("type") == "continue":
+                            continue
+                        
+                        maneuver = step.get("maneuver", {})
+                        m_type = maneuver.get("type", "continue")
+                        m_mod = maneuver.get("modifier", "")
+                        road_name = step.get("name") or step.get("ref") or "Highway"
+                        
+                        # Human readable direction
+                        if m_type == "depart":
+                            instruction = f"Depart on {road_name}"
+                        elif m_type == "arrive":
+                            instruction = f"Arrive at waypoint #{leg_idx + 1}"
+                        elif m_mod:
+                            instruction = f"{m_type.capitalize()} {m_mod} onto {road_name}"
+                        else:
+                            instruction = f"Continue onto {road_name}"
+
+                        directions.append({
+                            "instruction": instruction,
+                            "road": road_name,
+                            "distance_miles": step_dist_mi,
+                            "duration_minutes": round(step.get("duration", 0) / 60, 1),
+                            "maneuver": f"{m_type} {m_mod}".strip()
+                        })
 
                 return {
                     "distance_miles": round(distance_miles, 1),
                     "duration_hours": round(truck_calibrated_hours, 2),
                     "coordinates": leaflet_coords,
+                    "directions": directions[:40], # Cap to top prominent maneuvers
                     "provider": "OSRM"
                 }
     except Exception as e:
@@ -261,25 +290,34 @@ def calculate_osrm_route(waypoints: List[Tuple[float, float]]) -> Dict[str, Any]
     # High-Fidelity Fallback calculation if OSRM is offline
     total_dist = 0.0
     all_coords: List[List[float]] = []
+    directions: List[Dict[str, Any]] = []
     
     for i in range(len(waypoints) - 1):
         lat1, lng1 = waypoints[i]
         lat2, lng2 = waypoints[i + 1]
         
-        # Great circle direct distance * 1.25 road curvature factor for US interstate system
+        hub1 = find_closest_hub(lat1, lng1)
+        hub2 = find_closest_hub(lat2, lng2)
+        
         leg_direct = haversine_distance_miles(lat1, lng1, lat2, lng2)
         leg_highway_miles = leg_direct * 1.22
         total_dist += leg_highway_miles
 
-        # Generate smooth intermediate curve points
         num_segments = max(int(leg_highway_miles / 25), 8)
         for step in range(num_segments + (1 if i == len(waypoints) - 2 else 0)):
             t = step / num_segments
             cur_lat = lat1 + (lat2 - lat1) * t
             cur_lng = lng1 + (lng2 - lng1) * t
-            # Add subtle highway arc curvature
             arc = math.sin(t * math.pi) * 0.15 * math.sin(lng1)
             all_coords.append([round(cur_lat + arc * 0.5, 5), round(cur_lng, 5)])
+
+        directions.append({
+            "instruction": f"Follow Interstate Corridor from {hub1['name']} toward {hub2['name']}",
+            "road": "Interstate Freight Corridor",
+            "distance_miles": round(leg_highway_miles, 1),
+            "duration_minutes": round((leg_highway_miles / 55.0) * 60, 0),
+            "maneuver": "continue"
+        })
 
     avg_truck_mph = 55.0
     duration_hours = total_dist / avg_truck_mph
@@ -288,6 +326,7 @@ def calculate_osrm_route(waypoints: List[Tuple[float, float]]) -> Dict[str, Any]
         "distance_miles": round(total_dist, 1),
         "duration_hours": round(duration_hours, 2),
         "coordinates": all_coords,
+        "directions": directions,
         "provider": "SpotterRouteEngine"
     }
 

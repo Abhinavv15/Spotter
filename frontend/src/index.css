@@ -1,31 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 222 47% 5%;
-    --foreground: 210 40% 96%;
-    --card: 222 44% 10%;
-    --card-foreground: 210 40% 96%;
-    --popover: 222 44% 10%;
-    --popover-foreground: 210 40% 96%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 5%;
-    --secondary: 258 90% 76%;
-    --secondary-foreground: 222 47% 5%;
-    --muted: 222 43% 14%;
-    --muted-foreground: 215 20% 55%;
-    --accent: 217 91% 60%;
-    --accent-foreground: 222 47% 5%;
-    --destructive: 0 84% 60%;
+    --background: 140 30% 4%;
+    --foreground: 135 15% 95%;
+    --card: 140 25% 8%;
+    --card-foreground: 135 15% 95%;
+    --popover: 140 25% 8%;
+    --popover-foreground: 135 15% 95%;
+    --primary: 88 83% 52%; /* Nexterra Signature Lime #8AE922 */
+    --primary-foreground: 140 30% 4%;
+    --secondary: 142 70% 58%; /* Fresh Leaf Green */
+    --secondary-foreground: 140 30% 4%;
+    --muted: 140 25% 10%;
+    --muted-foreground: 140 10% 65%;
+    --accent: 48 96% 53%; /* Gold Amber */
+    --accent-foreground: 140 30% 4%;
+    --destructive: 347 89% 61%;
     --destructive-foreground: 0 0% 100%;
-    --border: 222 35% 16%;
-    --input: 222 35% 18%;
-    --ring: 217 91% 60%;
-    --radius: 0.75rem;
+    --border: 140 15% 15%;
+    --input: 140 15% 18%;
+    --ring: 88 83% 52%;
+    --radius: 1.25rem;
   }
 
   * {
@@ -34,127 +32,132 @@
 
   html {
     color-scheme: dark;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-background text-foreground antialiased min-h-screen;
-    background-color: #060c17;
-    color: #f1f5f9;
+    @apply text-foreground antialiased min-h-screen;
+    background-color: #070C09;
+    color: #F2F5F3;
     overflow-x: hidden;
+    font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-weight: 800;
+    letter-spacing: -0.035em;
   }
 
   code, pre, .font-mono {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 
   ::selection {
-    background: rgba(59, 130, 246, 0.3);
-    color: #60a5fa;
+    background: rgba(138, 233, 34, 0.4);
+    color: #8AE922;
   }
 }
 
-/* ── Glassmorphism utilities ──────────────────────────────────────────────── */
+/* ── Fixed Aerial Nature & Highway Background Layer ───────────────────────── */
+.nature-bg-layer {
+  background-image: url('/assets/highway_forest_bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ── Nexterra Frosted Organic Glassmorphism ───────────────────────────────── */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(12, 22, 16, 0.75);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-panel-deep {
+  background: rgba(8, 16, 11, 0.82);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .glass-card {
-  background: rgba(17, 24, 45, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  background: rgba(14, 25, 18, 0.68);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 48px 0 rgba(0, 0, 0, 0.45);
 }
 
 .glass-card-hover {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .glass-card-hover:hover {
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(138, 233, 34, 0.45);
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5), 0 0 20px -3px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.6), 0 0 25px -3px rgba(138, 233, 34, 0.25);
 }
 
 /* ── Custom scrollbar ─────────────────────────────────────────────────────── */
 ::-webkit-scrollbar,
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track,
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: rgba(10, 17, 13, 0.8);
 }
 ::-webkit-scrollbar-thumb,
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #1E3324;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover,
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #8AE922;
 }
 
-/* ── Leaflet dark overrides ───────────────────────────────────────────────── */
+/* ── Leaflet dark lime overrides ─────────────────────────────────────────── */
 .leaflet-container {
-  background-color: #060c17 !important;
-  font-family: 'Inter', sans-serif !important;
+  background-color: #070C09 !important;
+  font-family: -apple-system, "system-ui", "Segoe UI", Roboto, sans-serif !important;
+}
+.dark-tiles,
+.leaflet-tile-pane img.dark-tiles {
+  filter: brightness(0.6) invert(1) contrast(2.7) hue-rotate(160deg) saturate(0.3) brightness(0.8) !important;
 }
 .leaflet-popup-content-wrapper {
-  background: #0f172a !important;
-  color: #f1f5f9 !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.6) !important;
+  background: rgba(12, 22, 16, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  color: #F2F5F3 !important;
+  border: 1px solid rgba(138, 233, 34, 0.35) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 40px -5px rgba(0,0,0,0.85), 0 0 20px -3px rgba(138, 233, 34, 0.25) !important;
 }
 .leaflet-popup-tip {
-  background: #0f172a !important;
+  background: rgba(12, 22, 16, 0.95) !important;
 }
 .leaflet-control-zoom a {
-  background-color: #1e293b !important;
-  color: #94a3b8 !important;
-  border-color: #334155 !important;
+  background-color: rgba(14, 25, 18, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  color: #8E9E93 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 .leaflet-control-zoom a:hover {
-  background-color: #334155 !important;
-  color: #f1f5f9 !important;
+  background-color: #1A3022 !important;
+  color: #8AE922 !important;
 }
 .leaflet-control-attribution {
-  background: rgba(15,23,42,0.8) !important;
-  color: #475569 !important;
+  background: rgba(7, 12, 9, 0.85) !important;
+  color: #617367 !important;
   font-size: 9px !important;
 }
 .leaflet-control-attribution a {
-  color: #64748b !important;
-}
-
-/* ── Animations ───────────────────────────────────────────────────────────── */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-.shimmer {
-  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(2); opacity: 0; }
-}
-.pulse-ring::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 2px solid currentColor;
-  animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  color: #8AE922 !important;
 }
 
 /* ── Print / ELD export ───────────────────────────────────────────────────── */

@@ -277,12 +277,11 @@ def plan_trip(request):
         "restart_day": hos_result.restart_day,
         "driving_hours_remaining_day1": max(0.0, 11.0 - (hos_result.daily_logs[0].driving_hours if hos_result.daily_logs else 0.0)),
         "window_hours_remaining_day1": max(0.0, 14.0 - (hos_result.daily_logs[0].cycle_hours_today if hos_result.daily_logs else 0.0)),
-        "summary_text": hos_result.status_summary,
         "violations": validation.get("violations", []),
         "explanations": hos_result.explanations,
         "checks_passed": validation.get("checks_passed", [])
     }
-
+    resp_data["directions"] = route_res.get("directions", [])
     return Response(resp_data, status=status.HTTP_201_CREATED)
 
 

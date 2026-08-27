@@ -1,6 +1,7 @@
 /**
  * StopsTimeline.tsx
  * Vertical timeline of all scheduled stops with HOS context.
+ * Nexterra styling with signature lime stop badges and clean cards.
  */
 import { motion } from 'framer-motion'
 import { 
@@ -16,14 +17,14 @@ const STOP_CONFIG: Record<StopType, {
   bg: string
   border: string
 }> = {
-  CURRENT:   { icon: Navigation2, label: 'Current Location', color: 'text-blue-400',   bg: 'bg-blue-950/40',   border: 'border-blue-800' },
-  PICKUP:    { icon: Package,     label: 'Pickup',           color: 'text-green-400',  bg: 'bg-green-950/40',  border: 'border-green-800' },
-  DROPOFF:   { icon: MapPin,      label: 'Dropoff',          color: 'text-orange-400', bg: 'bg-orange-950/40', border: 'border-orange-800' },
-  FUEL:      { icon: Fuel,        label: 'Fuel Stop',        color: 'text-yellow-400', bg: 'bg-yellow-950/40', border: 'border-yellow-800' },
-  REST_10H:  { icon: Moon,        label: '10h Rest',         color: 'text-purple-400', bg: 'bg-purple-950/40', border: 'border-purple-800' },
-  REST_34H:  { icon: RefreshCw,   label: '34h Restart',      color: 'text-red-400',    bg: 'bg-red-950/40',    border: 'border-red-800' },
-  BREAK_30M: { icon: Coffee,      label: '30-min Break',     color: 'text-teal-400',   bg: 'bg-teal-950/40',   border: 'border-teal-800' },
-  COMBINED:  { icon: Layers,      label: 'Combined Stop',    color: 'text-indigo-400', bg: 'bg-indigo-950/40', border: 'border-indigo-800' },
+  CURRENT:   { icon: Navigation2, label: 'Current Origin',     color: 'text-[#8AE922]', bg: 'bg-[#8AE922]/15', border: 'border-[#8AE922]/40' },
+  PICKUP:    { icon: Package,     label: 'Shipper Pickup',     color: 'text-emerald-400', bg: 'bg-emerald-950/40', border: 'border-emerald-500/40' },
+  DROPOFF:   { icon: MapPin,      label: 'Receiver Delivery',  color: 'text-[#8AE922]', bg: 'bg-[#8AE922]/15', border: 'border-[#8AE922]/40' },
+  FUEL:      { icon: Fuel,        label: 'Fueling Stop',       color: 'text-amber-400',   bg: 'bg-amber-950/40',   border: 'border-amber-500/40' },
+  REST_10H:  { icon: Moon,        label: '10h Off-Duty Rest',  color: 'text-teal-300',    bg: 'bg-teal-950/40',    border: 'border-teal-500/40' },
+  REST_34H:  { icon: RefreshCw,   label: '34h Cycle Restart',  color: 'text-amber-400',   bg: 'bg-amber-950/40',   border: 'border-amber-500/40' },
+  BREAK_30M: { icon: Coffee,      label: '30-min Rest Break',  color: 'text-[#8AE922]', bg: 'bg-[#8AE922]/15', border: 'border-[#8AE922]/40' },
+  COMBINED:  { icon: Layers,      label: 'Combined Stop',      color: 'text-emerald-300', bg: 'bg-emerald-950/40', border: 'border-emerald-500/40' },
 }
 
 interface StopsTimelineProps {
@@ -49,7 +50,7 @@ function formatDuration(minutes: number): string {
 
 export default function StopsTimeline({ stops }: StopsTimelineProps) {
   return (
-    <div className="relative flex flex-col gap-0">
+    <div className="relative flex flex-col gap-0 py-2">
       {stops.map((stop, i) => {
         const cfg = STOP_CONFIG[stop.stop_type] || STOP_CONFIG.CURRENT
         const Icon = cfg.icon
@@ -60,39 +61,41 @@ export default function StopsTimeline({ stops }: StopsTimelineProps) {
             key={stop.stop_sequence}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="flex gap-3"
+            transition={{ delay: i * 0.04 }}
+            className="flex gap-3.5"
           >
             {/* Stem */}
             <div className="flex flex-col items-center">
-              <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 flex-shrink-0 ${cfg.bg} ${cfg.border} z-10`}>
+              <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 shrink-0 ${cfg.bg} ${cfg.border} z-10 shadow-sm`}>
                 <Icon size={14} className={cfg.color} />
               </div>
               {!isLast && (
-                <div className="w-px flex-1 bg-gradient-to-b from-slate-700 to-slate-800 my-1" style={{ minHeight: 24 }} />
+                <div className="w-px flex-1 bg-gradient-to-b from-white/20 to-white/5 my-1" style={{ minHeight: 28 }} />
               )}
             </div>
 
             {/* Card */}
-            <div className={`mb-3 flex-1 rounded-xl border ${cfg.border} ${cfg.bg} p-3`}>
+            <div className={`mb-3.5 flex-1 rounded-2xl border ${cfg.border} ${cfg.bg} p-4 backdrop-blur-md`}>
               <div className="flex items-start justify-between gap-2 mb-1">
                 <div>
-                  <span className={`text-xs font-bold uppercase tracking-wider ${cfg.color}`}>
-                    {cfg.label}
-                  </span>
-                  {stop.is_optimized && (
-                    <span className="ml-2 text-[9px] bg-indigo-900/60 text-indigo-300 border border-indigo-800 rounded px-1 py-0.5">
-                      Optimized
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={`text-xs font-extrabold uppercase tracking-wider font-heading ${cfg.color}`}>
+                      {cfg.label}
                     </span>
-                  )}
-                  <p className="text-sm font-semibold text-slate-200 mt-0.5 leading-tight">
+                    {stop.is_optimized && (
+                      <span className="text-[10px] font-bold bg-[#8AE922]/20 text-[#8AE922] border border-[#8AE922]/30 rounded-md px-1.5 py-0.5">
+                        Optimized Stop
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm sm:text-base font-bold text-slate-100 mt-1 leading-snug font-heading">
                     {stop.location_name}
                   </p>
                 </div>
-                <div className="text-right flex-shrink-0">
-                  <p className="text-[10px] text-slate-500">Stop #{stop.stop_sequence}</p>
+                <div className="text-right shrink-0 font-mono">
+                  <p className="text-[10px] text-slate-400">Stop #{stop.stop_sequence}</p>
                   {stop.odometer_miles > 0 && (
-                    <p className="text-[10px] font-semibold text-slate-400">
+                    <p className="text-xs font-bold text-[#8AE922]">
                       {stop.odometer_miles.toFixed(0)} mi
                     </p>
                   )}
@@ -100,35 +103,37 @@ export default function StopsTimeline({ stops }: StopsTimelineProps) {
               </div>
 
               {/* Timing row */}
-              <div className="flex items-center gap-3 text-[10px] text-slate-500 mt-1.5 flex-wrap">
-                <span className="flex items-center gap-1">
-                  <Clock size={9} />
-                  Arrive: <span className="text-slate-400 ml-0.5">{formatTime(stop.arrival_time)}</span>
+              <div className="flex items-center gap-3.5 text-xs text-slate-400 mt-2 flex-wrap font-medium">
+                <span className="flex items-center gap-1.5 font-mono">
+                  <Clock size={12} className="text-slate-500" />
+                  <span>Arrive:</span>
+                  <span className="text-slate-200 font-semibold">{formatTime(stop.arrival_time)}</span>
                 </span>
                 {stop.duration_minutes > 0 && (
-                  <span className="flex items-center gap-1">
-                    <Milestone size={9} />
-                    Stay: <span className="text-slate-400 ml-0.5">{formatDuration(stop.duration_minutes)}</span>
+                  <span className="flex items-center gap-1.5 font-mono">
+                    <Milestone size={12} className="text-slate-500" />
+                    <span>Duration:</span>
+                    <span className="text-slate-200 font-semibold">{formatDuration(stop.duration_minutes)}</span>
                   </span>
                 )}
                 {stop.distance_from_last_stop_miles > 0 && (
-                  <span className="text-slate-600">
-                    +{stop.distance_from_last_stop_miles.toFixed(0)} mi from last
+                  <span className="text-slate-500 font-mono">
+                    (+{stop.distance_from_last_stop_miles.toFixed(0)} mi)
                   </span>
                 )}
               </div>
 
               {/* Reason */}
               {stop.reason && (
-                <p className="text-[10px] text-slate-500 mt-1.5 leading-relaxed border-t border-slate-800/50 pt-1.5">
-                  <span className="text-slate-600">Why: </span>{stop.reason}
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed border-t border-white/5 pt-2">
+                  <span className="text-slate-500 font-medium">Activity: </span>{stop.reason}
                 </p>
               )}
 
               {/* HOS Impact */}
               {stop.hos_impact && (
-                <p className="text-[10px] text-blue-400/70 mt-1 leading-relaxed">
-                  <span className="text-blue-500/80">HOS: </span>{stop.hos_impact}
+                <p className="text-xs text-[#8AE922]/90 mt-1 leading-relaxed font-medium">
+                  <span className="text-[#8AE922] font-bold">HOS Status: </span>{stop.hos_impact}
                 </p>
               )}
             </div>
