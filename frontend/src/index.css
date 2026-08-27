@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,137 +6,164 @@
 
 @layer base {
   :root {
-    --background: 224 48% 8%;
-    --foreground: 185 24% 93%;
-    --card: 224 44% 12%;
-    --card-foreground: 185 24% 93%;
-    --popover: 224 44% 12%;
-    --popover-foreground: 185 24% 93%;
-    --primary: 176 100% 42%;
-    --primary-foreground: 224 48% 8%;
+    --background: 222 47% 5%;
+    --foreground: 210 40% 96%;
+    --card: 222 44% 10%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 44% 10%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 5%;
     --secondary: 258 90% 76%;
-    --secondary-foreground: 224 48% 8%;
-    --muted: 225 43% 15%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 36 86% 67%;
-    --accent-foreground: 224 48% 8%;
-    --destructive: 349 89% 60%;
+    --secondary-foreground: 222 47% 5%;
+    --muted: 222 43% 14%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 222 47% 5%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 224 35% 18%;
-    --input: 224 35% 20%;
-    --ring: 176 100% 42%;
-    --radius: 0.5rem;
+    --border: 222 35% 16%;
+    --input: 222 35% 18%;
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;
   }
 
   * {
-    @apply border-border;
+    @apply border-border box-border;
   }
 
   html {
     color-scheme: dark;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/30 selection:text-primary;
-    background-color: #0B1020;
-    color: #E8F1F2;
+    @apply bg-background text-foreground antialiased min-h-screen;
+    background-color: #060c17;
+    color: #f1f5f9;
     overflow-x: hidden;
   }
 
   code, pre, .font-mono {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  ::selection {
+    background: rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
   }
 }
 
-/* Custom Glassmorphism & Aesthetics */
+/* ── Glassmorphism utilities ──────────────────────────────────────────────── */
 .glass-panel {
-  background: rgba(17, 24, 45, 0.75);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .glass-card {
-  background: rgba(22, 31, 56, 0.6);
+  background: rgba(17, 24, 45, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
 .glass-card-hover {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .glass-card-hover:hover {
-  background: rgba(22, 31, 56, 0.85);
-  border-color: rgba(0, 212, 199, 0.3);
+  border-color: rgba(59, 130, 246, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.4), 0 0 20px -3px rgba(0, 212, 199, 0.15);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5), 0 0 20px -3px rgba(59, 130, 246, 0.15);
 }
 
-.neon-border-teal {
-  box-shadow: 0 0 15px -2px rgba(0, 212, 199, 0.35);
-  border-color: #00D4C7;
+/* ── Custom scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
-
-.neon-border-amber {
-  box-shadow: 0 0 15px -2px rgba(244, 184, 96, 0.35);
-  border-color: #F4B860;
+::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0f172a;
 }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0B1020;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1E293B;
+::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e293b;
   border-radius: 9999px;
 }
-
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
 
-/* Leaflet Map Dark Styling Override */
+/* ── Leaflet dark overrides ───────────────────────────────────────────────── */
 .leaflet-container {
-  background-color: #0B1020 !important;
+  background-color: #060c17 !important;
   font-family: 'Inter', sans-serif !important;
 }
-
 .leaflet-popup-content-wrapper {
-  background: #11182D !important;
-  color: #E8F1F2 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.6) !important;
 }
-
 .leaflet-popup-tip {
-  background: #11182D !important;
+  background: #0f172a !important;
+}
+.leaflet-control-zoom a {
+  background-color: #1e293b !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+.leaflet-control-zoom a:hover {
+  background-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+.leaflet-control-attribution {
+  background: rgba(15,23,42,0.8) !important;
+  color: #475569 !important;
+  font-size: 9px !important;
+}
+.leaflet-control-attribution a {
+  color: #64748b !important;
 }
 
-/* Print CSS for ELD Sheets */
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2); opacity: 0; }
+}
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid currentColor;
+  animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Print / ELD export ───────────────────────────────────────────────────── */
 @media print {
   body {
     background-color: #ffffff !important;
     color: #000000 !important;
   }
-  .no-print {
-    display: none !important;
-  }
-  .print-only {
-    display: block !important;
-  }
-  .page-break {
-    page-break-after: always;
-    break-after: page;
-  }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .page-break { page-break-after: always; break-after: page; }
 }
