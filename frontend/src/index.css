@@ -4,24 +4,24 @@
 
 @layer base {
   :root {
-    --background: 140 30% 4%;
-    --foreground: 135 15% 95%;
-    --card: 140 25% 8%;
-    --card-foreground: 135 15% 95%;
-    --popover: 140 25% 8%;
-    --popover-foreground: 135 15% 95%;
-    --primary: 88 83% 52%; /* Nexterra Signature Lime #8AE922 */
+    --background: 140 25% 4%;
+    --foreground: 135 15% 96%;
+    --card: 140 20% 7%;
+    --card-foreground: 135 15% 96%;
+    --popover: 140 20% 7%;
+    --popover-foreground: 135 15% 96%;
+    --primary: 88 83% 52%; /* Spotter Lime #8AE922 */
     --primary-foreground: 140 30% 4%;
     --secondary: 142 70% 58%; /* Fresh Leaf Green */
     --secondary-foreground: 140 30% 4%;
-    --muted: 140 25% 10%;
-    --muted-foreground: 140 10% 65%;
+    --muted: 140 20% 9%;
+    --muted-foreground: 140 10% 60%;
     --accent: 48 96% 53%; /* Gold Amber */
     --accent-foreground: 140 30% 4%;
     --destructive: 347 89% 61%;
     --destructive-foreground: 0 0% 100%;
-    --border: 140 15% 15%;
-    --input: 140 15% 18%;
+    --border: 140 10% 14%;
+    --input: 140 12% 16%;
     --ring: 88 83% 52%;
     --radius: 1.25rem;
   }
@@ -39,15 +39,15 @@
 
   body {
     @apply text-foreground antialiased min-h-screen;
-    background-color: #070C09;
-    color: #F2F5F3;
+    background-color: #060B08;
+    color: #F3F6F4;
     overflow-x: hidden;
     font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
 
   h1, h2, h3, .font-heading {
     font-weight: 800;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.03em;
   }
 
   code, pre, .font-mono {
@@ -55,7 +55,7 @@
   }
 
   ::selection {
-    background: rgba(138, 233, 34, 0.4);
+    background: rgba(138, 233, 34, 0.35);
     color: #8AE922;
   }
 }
@@ -69,51 +69,51 @@
   background-repeat: no-repeat;
 }
 
-/* ── Nexterra Frosted Organic Glassmorphism ───────────────────────────────── */
+/* ── Refined Dark SaaS Glassmorphism (Linear / Stripe Standard) ─────────────── */
 .glass-panel {
-  background: rgba(12, 22, 16, 0.75);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(11, 18, 14, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-panel-deep {
-  background: rgba(8, 16, 11, 0.82);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(8, 14, 10, 0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-card {
-  background: rgba(14, 25, 18, 0.68);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 16px 48px 0 rgba(0, 0, 0, 0.45);
+  background: rgba(13, 21, 16, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.35);
 }
 
 .glass-card-hover {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .glass-card-hover:hover {
-  border-color: rgba(138, 233, 34, 0.45);
-  transform: translateY(-2px);
-  box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.6), 0 0 25px -3px rgba(138, 233, 34, 0.25);
+  border-color: rgba(138, 233, 34, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(138, 233, 34, 0.15);
 }
 
 /* ── Custom scrollbar ─────────────────────────────────────────────────────── */
 ::-webkit-scrollbar,
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track,
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(10, 17, 13, 0.8);
+  background: rgba(8, 14, 10, 0.8);
 }
 ::-webkit-scrollbar-thumb,
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #1E3324;
+  background: #18281D;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover,
@@ -123,7 +123,7 @@
 
 /* ── Leaflet dark lime overrides ─────────────────────────────────────────── */
 .leaflet-container {
-  background-color: #070C09 !important;
+  background-color: #060B08 !important;
   font-family: -apple-system, "system-ui", "Segoe UI", Roboto, sans-serif !important;
 }
 .dark-tiles,
@@ -131,29 +131,29 @@
   filter: brightness(0.6) invert(1) contrast(2.7) hue-rotate(160deg) saturate(0.3) brightness(0.8) !important;
 }
 .leaflet-popup-content-wrapper {
-  background: rgba(12, 22, 16, 0.95) !important;
+  background: rgba(10, 17, 13, 0.95) !important;
   backdrop-filter: blur(16px) !important;
-  color: #F2F5F3 !important;
-  border: 1px solid rgba(138, 233, 34, 0.35) !important;
+  color: #F3F6F4 !important;
+  border: 1px solid rgba(138, 233, 34, 0.3) !important;
   border-radius: 16px !important;
-  box-shadow: 0 16px 40px -5px rgba(0,0,0,0.85), 0 0 20px -3px rgba(138, 233, 34, 0.25) !important;
+  box-shadow: 0 16px 40px -5px rgba(0,0,0,0.85) !important;
 }
 .leaflet-popup-tip {
-  background: rgba(12, 22, 16, 0.95) !important;
+  background: rgba(10, 17, 13, 0.95) !important;
 }
 .leaflet-control-zoom a {
-  background-color: rgba(14, 25, 18, 0.9) !important;
+  background-color: rgba(12, 20, 15, 0.9) !important;
   backdrop-filter: blur(12px) !important;
   color: #8E9E93 !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
 .leaflet-control-zoom a:hover {
-  background-color: #1A3022 !important;
+  background-color: #16281C !important;
   color: #8AE922 !important;
 }
 .leaflet-control-attribution {
-  background: rgba(7, 12, 9, 0.85) !important;
-  color: #617367 !important;
+  background: rgba(6, 11, 8, 0.85) !important;
+  color: #556B5D !important;
   font-size: 9px !important;
 }
 .leaflet-control-attribution a {
