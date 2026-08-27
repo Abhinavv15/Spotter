@@ -154,6 +154,15 @@ export interface TripPlanResponse {
   duty_periods: DutyPeriodData[]
   daily_logs: DailyLogData[]
   hos_summary: HOSSummary
+  directions?: RouteDirectionStep[]
+}
+
+export interface RouteDirectionStep {
+  instruction: string
+  road?: string
+  distance_miles: number
+  duration_minutes: number
+  maneuver?: string
 }
 
 export interface LocationSuggestion {

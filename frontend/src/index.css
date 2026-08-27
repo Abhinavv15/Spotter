@@ -1,142 +1,172 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 224 48% 8%;
-    --foreground: 185 24% 93%;
-    --card: 224 44% 12%;
-    --card-foreground: 185 24% 93%;
-    --popover: 224 44% 12%;
-    --popover-foreground: 185 24% 93%;
-    --primary: 176 100% 42%;
-    --primary-foreground: 224 48% 8%;
-    --secondary: 258 90% 76%;
-    --secondary-foreground: 224 48% 8%;
-    --muted: 225 43% 15%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 36 86% 67%;
-    --accent-foreground: 224 48% 8%;
-    --destructive: 349 89% 60%;
+    --background: 140 25% 4%;
+    --foreground: 135 15% 96%;
+    --card: 140 20% 7%;
+    --card-foreground: 135 15% 96%;
+    --popover: 140 20% 7%;
+    --popover-foreground: 135 15% 96%;
+    --primary: 88 83% 52%; /* Spotter Lime #8AE922 */
+    --primary-foreground: 140 30% 4%;
+    --secondary: 142 70% 58%; /* Fresh Leaf Green */
+    --secondary-foreground: 140 30% 4%;
+    --muted: 140 20% 9%;
+    --muted-foreground: 140 10% 60%;
+    --accent: 48 96% 53%; /* Gold Amber */
+    --accent-foreground: 140 30% 4%;
+    --destructive: 347 89% 61%;
     --destructive-foreground: 0 0% 100%;
-    --border: 224 35% 18%;
-    --input: 224 35% 20%;
-    --ring: 176 100% 42%;
-    --radius: 0.5rem;
+    --border: 140 10% 14%;
+    --input: 140 12% 16%;
+    --ring: 88 83% 52%;
+    --radius: 1.25rem;
   }
 
   * {
-    @apply border-border;
+    @apply border-border box-border;
   }
 
   html {
     color-scheme: dark;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/30 selection:text-primary;
-    background-color: #0B1020;
-    color: #E8F1F2;
+    @apply text-foreground antialiased min-h-screen;
+    background-color: #060B08;
+    color: #F3F6F4;
     overflow-x: hidden;
+    font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 
   code, pre, .font-mono {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  ::selection {
+    background: rgba(138, 233, 34, 0.35);
+    color: #8AE922;
   }
 }
 
-/* Custom Glassmorphism & Aesthetics */
+/* ── Fixed Aerial Nature & Highway Background Layer ───────────────────────── */
+.nature-bg-layer {
+  background-image: url('/assets/highway_forest_bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ── Refined Dark SaaS Glassmorphism (Linear / Stripe Standard) ─────────────── */
 .glass-panel {
-  background: rgba(17, 24, 45, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 18, 14, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-deep {
+  background: rgba(8, 14, 10, 0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-card {
-  background: rgba(22, 31, 56, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  background: rgba(13, 21, 16, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.35);
 }
 
 .glass-card-hover {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .glass-card-hover:hover {
-  background: rgba(22, 31, 56, 0.85);
-  border-color: rgba(0, 212, 199, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.4), 0 0 20px -3px rgba(0, 212, 199, 0.15);
+  border-color: rgba(138, 233, 34, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(138, 233, 34, 0.15);
 }
 
-.neon-border-teal {
-  box-shadow: 0 0 15px -2px rgba(0, 212, 199, 0.35);
-  border-color: #00D4C7;
+/* ── Custom scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
-
-.neon-border-amber {
-  box-shadow: 0 0 15px -2px rgba(244, 184, 96, 0.35);
-  border-color: #F4B860;
+::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(8, 14, 10, 0.8);
 }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0B1020;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1E293B;
+::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #18281D;
   border-radius: 9999px;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #8AE922;
 }
 
-/* Leaflet Map Dark Styling Override */
+/* ── Leaflet dark lime overrides ─────────────────────────────────────────── */
 .leaflet-container {
-  background-color: #0B1020 !important;
-  font-family: 'Inter', sans-serif !important;
+  background-color: #060B08 !important;
+  font-family: -apple-system, "system-ui", "Segoe UI", Roboto, sans-serif !important;
 }
-
+.dark-tiles,
+.leaflet-tile-pane img.dark-tiles {
+  filter: brightness(0.6) invert(1) contrast(2.7) hue-rotate(160deg) saturate(0.3) brightness(0.8) !important;
+}
 .leaflet-popup-content-wrapper {
-  background: #11182D !important;
-  color: #E8F1F2 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  background: rgba(10, 17, 13, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  color: #F3F6F4 !important;
+  border: 1px solid rgba(138, 233, 34, 0.3) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 40px -5px rgba(0,0,0,0.85) !important;
 }
-
 .leaflet-popup-tip {
-  background: #11182D !important;
+  background: rgba(10, 17, 13, 0.95) !important;
+}
+.leaflet-control-zoom a {
+  background-color: rgba(12, 20, 15, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  color: #8E9E93 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.leaflet-control-zoom a:hover {
+  background-color: #16281C !important;
+  color: #8AE922 !important;
+}
+.leaflet-control-attribution {
+  background: rgba(6, 11, 8, 0.85) !important;
+  color: #556B5D !important;
+  font-size: 9px !important;
+}
+.leaflet-control-attribution a {
+  color: #8AE922 !important;
 }
 
-/* Print CSS for ELD Sheets */
+/* ── Print / ELD export ───────────────────────────────────────────────────── */
 @media print {
   body {
     background-color: #ffffff !important;
     color: #000000 !important;
   }
-  .no-print {
-    display: none !important;
-  }
-  .print-only {
-    display: block !important;
-  }
-  .page-break {
-    page-break-after: always;
-    break-after: page;
-  }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .page-break { page-break-after: always; break-after: page; }
 }

@@ -1,0 +1,11 @@
+{
+  "name": "spotter",
+  "version": "1.0.0",
+  "description": "Full-Stack HOS Route Planner & ELD Log Generator",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "dev:backend": "cd backend && ./venv/bin/python manage.py runserver 0.0.0.0:8000",
+    "build": "npm --prefix frontend run build",
+    "test": "cd backend && ./venv/bin/python manage.py test"
+  }
+}

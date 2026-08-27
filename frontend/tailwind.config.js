@@ -6,96 +6,76 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
+      fontFamily: {
+        sans: ['-apple-system', '"system-ui"', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+      },
       colors: {
-        border: "rgba(255, 255, 255, 0.08)",
+        border: "rgba(255, 255, 255, 0.09)",
         input: "rgba(255, 255, 255, 0.12)",
-        ring: "#00D4C7",
-        background: "#0B1020", // Midnight Ink
-        foreground: "#E8F1F2", // Ice
+        ring: "#8AE922", // Nexterra Vivid Lime
+        background: "#090E0B", // Deep Moss Obsidian
+        foreground: "#F2F5F3", // Clean Crisp White
         primary: {
-          DEFAULT: "#00D4C7", // Electric Teal
-          foreground: "#0B1020",
-          glow: "rgba(0, 212, 199, 0.35)",
+          DEFAULT: "#8AE922", // Nexterra Signature Lime
+          foreground: "#090E0B",
+          glow: "rgba(138, 233, 34, 0.35)",
         },
         secondary: {
-          DEFAULT: "#A78BFA", // Soft Lavender
-          foreground: "#0B1020",
+          DEFAULT: "#4ADE80", // Organic Green
+          foreground: "#090E0B",
         },
         destructive: {
-          DEFAULT: "#F43F5E", // Rose / Violation
+          DEFAULT: "#F43F5E", // Rose Violation
           foreground: "#FFFFFF",
         },
         muted: {
-          DEFAULT: "#161F38", // Card Dark
-          foreground: "#94A3B8", // Slate Light
+          DEFAULT: "#121C16", // Moss Dark Panel
+          foreground: "#8E9E93",
         },
         accent: {
-          DEFAULT: "#F4B860", // Warm Amber
-          foreground: "#0B1020",
+          DEFAULT: "#FACC15", // Warm Gold
+          foreground: "#090E0B",
         },
         success: {
-          DEFAULT: "#7FE7D5", // Muted Mint
-          foreground: "#0B1020",
+          DEFAULT: "#8AE922", // Lime
+          foreground: "#090E0B",
         },
         popover: {
-          DEFAULT: "#11182D",
-          foreground: "#E8F1F2",
+          DEFAULT: "#101913",
+          foreground: "#F2F5F3",
         },
         card: {
-          DEFAULT: "#11182D", // Deep Space
-          foreground: "#E8F1F2",
-          subtle: "#161F38",
+          DEFAULT: "#101913", // Deep Moss Card
+          foreground: "#F2F5F3",
+          subtle: "#152219",
+          lime: "#8AE922",
         },
-        // Dedicated Spotter Palette
         spotter: {
-          ink: "#0B1020",
-          space: "#11182D",
-          panel: "#161F38",
-          teal: "#00D4C7",
-          mint: "#7FE7D5",
-          lavender: "#A78BFA",
-          amber: "#F4B860",
-          ice: "#E8F1F2",
-          slate: "#65738B",
+          ink: "#090E0B",
+          space: "#0D1510",
+          panel: "#101913",
+          panelLight: "#16231B",
+          lime: "#8AE922",
+          limeLight: "#9EF538",
+          leaf: "#4ADE80",
+          forest: "#062817",
+          amber: "#FACC15",
+          rose: "#F43F5E",
+          ice: "#F2F5F3",
+          slate: "#7D8E82",
         }
       },
       borderRadius: {
-        lg: "0.75rem",
-        md: "0.5rem",
-        sm: "0.25rem",
+        xl: "1rem",
+        "2xl": "1.25rem",
+        "3xl": "1.75rem",
       },
       boxShadow: {
-        'glow-teal': '0 0 20px -3px rgba(0, 212, 199, 0.35)',
-        'glow-amber': '0 0 20px -3px rgba(244, 184, 96, 0.35)',
-        'glow-lavender': '0 0 20px -3px rgba(167, 139, 250, 0.35)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-      },
-      keyframes: {
-        "pulse-glow": {
-          "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.7", transform: "scale(1.03)" },
-        },
-        "slide-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "slide-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "pulse-glow": "pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "accordion-down": "slide-down 0.2s ease-out",
-        "accordion-up": "slide-up 0.2s ease-out",
+        'glow-lime': '0 0 25px -2px rgba(138, 233, 34, 0.4)',
+        'glow-leaf': '0 0 25px -2px rgba(74, 222, 128, 0.35)',
+        'glass': '0 12px 40px 0 rgba(0, 0, 0, 0.45)',
+        'glass-lime': '0 12px 40px 0 rgba(138, 233, 34, 0.12)',
       },
     },
   },

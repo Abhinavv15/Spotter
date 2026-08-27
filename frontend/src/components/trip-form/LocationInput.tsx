@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { MapPin, Loader2, Navigation } from 'lucide-react'
+import { MapPin, Loader2, Navigation, X } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { fetchLocationSuggestions } from '../../services/api'
@@ -21,16 +21,18 @@ export const LocationInput: React.FC<LocationInputProps> = ({
   placeholder,
   value,
   onChange,
-  iconColor = "text-primary",
+  iconColor = "text-[#8AE922]",
   required = false
 }) => {
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const userTypedRef = useRef(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!value || value.trim().length < 2) {
+    // Only search suggestions if user actively typed into THIS specific input
+    if (!userTypedRef.current || !value || value.trim().length < 2) {
       setSuggestions([])
       setIsOpen(false)
       return
@@ -40,14 +42,17 @@ export const LocationInput: React.FC<LocationInputProps> = ({
       setIsLoading(true)
       try {
         const results = await fetchLocationSuggestions(value)
-        setSuggestions(results)
-        setIsOpen(results.length > 0)
+        // If user is still focused and typing, show results
+        if (userTypedRef.current) {
+          setSuggestions(results)
+          setIsOpen(results.length > 0)
+        }
       } catch (err) {
         console.error(err)
       } finally {
         setIsLoading(false)
       }
-    }, 280)
+    }, 250)
 
     return () => clearTimeout(timer)
   }, [value])
@@ -56,6 +61,7 @@ export const LocationInput: React.FC<LocationInputProps> = ({
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false)
+        userTypedRef.current = false
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -63,15 +69,24 @@ export const LocationInput: React.FC<LocationInputProps> = ({
   }, [])
 
   const handleSelect = (item: LocationSuggestion) => {
+    userTypedRef.current = false
     onChange(item.name || item.display_name)
+    setSuggestions([])
+    setIsOpen(false)
+  }
+
+  const handleClear = () => {
+    userTypedRef.current = false
+    onChange('')
+    setSuggestions([])
     setIsOpen(false)
   }
 
   return (
     <div className="relative w-full" ref={containerRef}>
       <div className="flex items-center justify-between mb-1">
-        <Label htmlFor={id} className="text-xs text-slate-300">
-          {label} {required && <span className="text-primary">*</span>}
+        <Label htmlFor={id} className="text-xs text-slate-300 font-semibold font-heading">
+          {label} {required && <span className="text-[#8AE922]">*</span>}
         </Label>
       </div>
 
@@ -79,38 +94,60 @@ export const LocationInput: React.FC<LocationInputProps> = ({
         <Input
           id={id}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            userTypedRef.current = true
+            onChange(e.target.value)
+          }}
           onFocus={() => {
-            if (suggestions.length > 0) setIsOpen(true)
+            if (userTypedRef.current && suggestions.length > 0) {
+              setIsOpen(true)
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setIsOpen(false)
+              userTypedRef.current = false
+            }
           }}
           placeholder={placeholder}
           required={required}
           icon={
             isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+              <Loader2 className="h-4 w-4 animate-spin text-[#8AE922]" />
             ) : (
               <MapPin className={`h-4 w-4 ${iconColor}`} />
             )
           }
-          className="border-white/15 focus-visible:border-primary/60 bg-spotter-space/80"
+          className="border-white/10 focus-visible:border-[#8AE922]/70 bg-[#080D0A] text-slate-200 placeholder:text-slate-500 rounded-xl text-xs sm:text-sm pr-8"
           autoComplete="off"
         />
 
+        {value && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1 transition-colors"
+            title="Clear input"
+          >
+            <X size={13} />
+          </button>
+        )}
+
         {isOpen && suggestions.length > 0 && (
-          <div className="absolute left-0 right-0 top-full mt-1.5 z-50 rounded-xl border border-white/15 bg-spotter-space/95 shadow-2xl backdrop-blur-xl max-h-60 overflow-y-auto divide-y divide-white/5 animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute left-0 right-0 top-full mt-2 z-[100] rounded-2xl border border-[#8AE922]/40 bg-[#0C140F]/98 shadow-2xl backdrop-blur-2xl max-h-60 overflow-y-auto custom-scrollbar divide-y divide-white/5 animate-in fade-in zoom-in-95 duration-150">
             {suggestions.map((item, idx) => (
               <button
                 key={`${item.lat}-${item.lng}-${idx}`}
                 type="button"
                 onClick={() => handleSelect(item)}
-                className="w-full px-3.5 py-2.5 text-left text-xs text-slate-200 hover:bg-primary/15 hover:text-white transition-colors flex items-center space-x-2.5 group"
+                className="w-full px-4 py-2.5 text-left text-xs text-slate-200 hover:bg-[#8AE922]/15 hover:text-white transition-colors flex items-center space-x-2.5 group"
               >
-                <Navigation className="h-3.5 w-3.5 text-slate-400 group-hover:text-primary shrink-0" />
+                <Navigation className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#8AE922] shrink-0" />
                 <div className="truncate">
-                  <span className="font-semibold text-white block truncate">
+                  <span className="font-bold text-white block truncate">
                     {item.name}
                   </span>
-                  <span className="text-[11px] text-slate-400 block truncate">
+                  <span className="text-[11px] text-slate-400 block truncate font-medium">
                     {item.display_name}
                   </span>
                 </div>

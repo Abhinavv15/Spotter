@@ -3,29 +3,30 @@ import { cn } from "../../lib/utils"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "glow" | "amber"
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "glow" | "amber" | "lime"
   size?: "default" | "sm" | "lg" | "icon"
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", ...props }, ref) => {
-    const baseStyles = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]"
+    const baseStyles = "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]"
     
     const variants = {
-      default: "bg-primary text-background hover:bg-primary/90 font-semibold shadow-glow-teal",
-      destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md",
-      outline: "border border-white/20 bg-background/50 hover:bg-white/10 hover:text-white text-slate-200",
-      secondary: "bg-secondary text-background hover:bg-secondary/90 font-semibold shadow-glow-lavender",
+      default: "bg-[#8AE922] text-[#080D0A] hover:bg-[#9EF538] font-extrabold shadow-glow-lime",
+      lime: "bg-[#8AE922] text-[#080D0A] hover:bg-[#9EF538] font-extrabold shadow-glow-lime",
+      destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md font-semibold",
+      outline: "border border-white/15 bg-spotter-panel/75 hover:bg-white/10 hover:text-white text-slate-200 backdrop-blur-md",
+      secondary: "bg-secondary text-[#080D0A] hover:bg-emerald-400 font-extrabold shadow-glow-leaf",
       ghost: "hover:bg-white/10 hover:text-white text-slate-300",
-      link: "text-primary underline-offset-4 hover:underline",
-      glow: "bg-gradient-to-r from-primary via-[#00f2e2] to-primary text-background font-bold shadow-glow-teal hover:brightness-110",
-      amber: "bg-accent text-background font-semibold hover:bg-accent/90 shadow-glow-amber",
+      link: "text-[#8AE922] underline-offset-4 hover:underline",
+      glow: "bg-gradient-to-r from-[#8AE922] via-[#A8F84A] to-[#8AE922] text-[#080D0A] font-extrabold shadow-glow-lime hover:brightness-110",
+      amber: "bg-accent text-[#080D0A] font-extrabold hover:bg-accent/90 shadow-sm",
     }
 
     const sizes = {
       default: "h-10 px-4 py-2",
-      sm: "h-8 rounded-md px-3 text-xs",
-      lg: "h-12 rounded-lg px-8 text-base",
+      sm: "h-8 rounded-lg px-3 text-xs",
+      lg: "h-12 rounded-xl px-7 text-base",
       icon: "h-10 w-10",
     }
 

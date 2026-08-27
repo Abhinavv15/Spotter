@@ -130,3 +130,33 @@ class HOSEngineUnitTests(TestCase):
                 log.on_duty_not_driving_hours
             )
             self.assertAlmostEqual(status_sum, 24.0, places=2)
+
+    def test_stop_optimizer_annotates_every_stop_with_justification(self):
+        from .stop_optimizer import StopOptimizer
+        scheduler = HOSScheduler(
+            current_location=self.chicago,
+            pickup_location=self.indianapolis,
+            dropoff_location=self.atlanta,
+            total_distance_miles=700.0,
+            route_geometry=[[41.8781, -87.6298], [33.7490, -84.3880]],
+            current_cycle_used=20.0
+        )
+        res = scheduler.plan_schedule()
+        opt_res = StopOptimizer.optimize_and_annotate(res)
+        for stop in opt_res.stops:
+            self.assertTrue(len(stop.reason) > 10, f"Stop #{stop.sequence} ({stop.stop_type}) missing justification")
+
+    def test_validator_passes_compliant_schedule(self):
+        scheduler = HOSScheduler(
+            current_location=self.chicago,
+            pickup_location=self.chicago,
+            dropoff_location=self.indianapolis,
+            total_distance_miles=180.0,
+            route_geometry=[[41.8781, -87.6298], [39.7684, -86.1581]],
+            current_cycle_used=10.0
+        )
+        res = scheduler.plan_schedule()
+        val = HOSValidator.validate_schedule(res)
+        self.assertTrue(val["is_valid"])
+        self.assertEqual(len(val["violations"]), 0)
+        self.assertGreater(len(val["checks_passed"]), 0)
