@@ -4,7 +4,7 @@ Deterministically simulates truck route execution under FMCSA 49 CFR § 395 rule
 """
 
 import math
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone as dt_timezone
 from typing import List, Tuple, Dict, Any, Optional
 from .domain import (
     DutyStatus,
@@ -33,6 +33,19 @@ from .calculator import (
 from .services.routing import find_location_along_route, haversine_distance_miles
 
 
+def _make_aware(dt: datetime) -> datetime:
+    """Ensure a datetime is UTC-aware. If already aware, return as-is."""
+    if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+        return dt.replace(tzinfo=dt_timezone.utc)
+    return dt
+
+
+def _midnight_of(dt: datetime) -> datetime:
+    """Return the UTC-aware midnight (00:00:00) of the same calendar date."""
+    tz = dt.tzinfo or dt_timezone.utc
+    return datetime(dt.year, dt.month, dt.day, 0, 0, 0, tzinfo=tz)
+
+
 class HOSScheduler:
     """
     Simulates truck movement, duty status transitions, stop scheduling,
@@ -58,13 +71,15 @@ class HOSScheduler:
         self.current_cycle_used = max(0.0, min(70.0, current_cycle_used))
         self.average_speed_mph = max(30.0, min(70.0, average_speed_mph))
 
-        # Default departure: Tomorrow at 06:00:00 if not specified
+        # Default departure: Tomorrow at 06:00:00 UTC if not specified
         if departure_time is None:
-            now = datetime.now()
-            start_date = now.date() + timedelta(days=1)
-            self.departure_time = datetime(start_date.year, start_date.month, start_date.day, 6, 0, 0)
+            start_date = datetime.now(dt_timezone.utc).date() + timedelta(days=1)
+            self.departure_time = datetime(
+                start_date.year, start_date.month, start_date.day, 6, 0, 0,
+                tzinfo=dt_timezone.utc
+            )
         else:
-            self.departure_time = departure_time
+            self.departure_time = _make_aware(departure_time)
 
         # Calculate Leg 1 (Current -> Pickup) and Leg 2 (Pickup -> Dropoff) distances
         d_pickup = haversine_distance_miles(
@@ -106,7 +121,7 @@ class HOSScheduler:
         stop_seq = 1
 
         # Day 1 start: Initial Off-Duty from 00:00 to departure_time
-        day_start_midnight = datetime(curr_time.year, curr_time.month, curr_time.day, 0, 0, 0)
+        day_start_midnight = _midnight_of(curr_time)
         initial_off_hours = (curr_time - day_start_midnight).total_seconds() / 3600.0
         if initial_off_hours > 0:
             events.append({
@@ -404,7 +419,7 @@ class HOSScheduler:
         )
 
         # Final Off-Duty to close out final calendar day at 24:00
-        final_day_midnight = datetime(curr_time.year, curr_time.month, curr_time.day, 0, 0, 0) + timedelta(days=1)
+        final_day_midnight = _midnight_of(curr_time) + timedelta(days=1)
         remaining_day_off = (final_day_midnight - curr_time).total_seconds() / 3600.0
         if remaining_day_off > 0:
             events.append({
@@ -472,7 +487,7 @@ class HOSScheduler:
         rolling_cycle = self.current_cycle_used
 
         while current_date <= last_date:
-            day_start = datetime(current_date.year, current_date.month, current_date.day, 0, 0, 0)
+            day_start = datetime(current_date.year, current_date.month, current_date.day, 0, 0, 0, tzinfo=dt_timezone.utc)
             day_end = day_start + timedelta(days=1)
 
             day_segments: List[DutySegment] = []
